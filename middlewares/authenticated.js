@@ -14,7 +14,7 @@ const authed = async (req, res, next) => {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         const user = User.findById(payload.id).select('-password');
 
-        req.user = { userId: payload.userId, name: payload.name, email: payload.email }
+        req.user = { userId: payload.userId, username: payload.username, email: payload.email }
         next();
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
