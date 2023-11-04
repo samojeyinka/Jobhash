@@ -22,6 +22,13 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimter = require('express-rate-limit');
 
+
+//Swagger
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+
 app.set('trust proxy', 1);
 app.use(rateLimter({
     windowMs: 15 * 60 * 1000,
@@ -38,8 +45,10 @@ app.use('/api/v1/auth', usersRouter);
 app.use('/api/v1/jobs',authed, jobsRouter);
 
 app.get('/', (req, res) => {
-    res.send('<h1>JOBBAG</h1><a href="/">Documentation</a>');
+    res.send('<h1>Jobash API</h1><a href="/api-docs">Documentation</a>');
 });
+
+app.use('/api-docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
 app.use(notFound);
